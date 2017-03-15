@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+<script>
+function login() 
+{
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+      this.response;
+    }
+  };
+  xhttp.open("GET", "checkLogin.php?u=" + document.getElementById("username") + "&p=" + document.getElementById("password"), true);
+  xhttp.send();
+}
+</script>
+
+
+<form>
+  <h3>Login</h3>
+  <p style="margin:0px" id ="userID">User:</p>
+  <input type="text" id="userName" >
+  <br>
+  <p style="margin:0px">Password:</p>
+  <input type="password" id="password" >
+  <br>
+  <input type="button" id="submit" onclick="login()">
+</form>
+
+<p id="desc"></p>
+
+</body>
+</html>
