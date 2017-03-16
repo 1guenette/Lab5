@@ -1,82 +1,116 @@
 <?php
-	include_once('Crypt/RSA.php');
+include_once('phpseclib/Crypt/RSA.php');
 
-	//Function for encrypting with RSA
-	function rsa_encrypt($string, $public_key)
-	{
-    	//Create an instance of the RSA cypher and load the key into it
-    	$cipher = new Crypt_RSA();
-    	$cipher->loadKey($public_key);
-    	//Set the encryption mode
-    	$cipher->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
-    	//Return the encrypted version
-    	return $cipher->encrypt($string);
-	}
+//Function for encrypting with RSA
+function rsa_encrypt($string, $public_key)
+{
+    //Create an instance of the RSA cypher and load the key into it
+    $cipher = new Crypt_RSA();
+    $cipher->loadKey($public_key);
+    //Set the encryption mode
+    $cipher->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
+    //Return the encrypted version
+    return $cipher->encrypt($string);
+}
 
-	//Function for decrypting with RSA 
-	function rsa_decrypt($string, $private_key)
-	{
-    	//Create an instance of the RSA cypher and load the key into it
-    	$cipher = new Crypt_RSA();
-    	$cipher->loadKey($private_key);
-    	//Set the encryption mode
-    	$cipher->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
-    	//Return the decrypted version
-    	return $cipher->decrypt($string);
-	}
+//Function for decrypting with RSA
+function rsa_decrypt($string, $private_key)
+{
+    //Create an instance of the RSA cypher and load the key into it
+    $cipher = new Crypt_RSA();
+    $cipher->loadKey($private_key);
+    //Set the encryption mode
+    $cipher->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
+    //Return the decrypted version
+    return $cipher->decrypt($string);
+}
 
-	$rsa = new Crypt_RSA();
-	$rsa->setPrivateKeyFormat(CRYPT_RSA_PRIVATE_FORMAT_PKCS1);
-	$rsa->setPublicKeyFormat(CRYPT_RSA_PUBLIC_FORMAT_PKCS1);
-	extract($rsa->createKey(1024)); /// makes $publickey and $privatekey available
-	echo $privatekey;
-	echo $publickey;
+$rsa = new Crypt_RSA();
+$rsa->setPrivateKeyFormat(CRYPT_RSA_PRIVATE_FORMAT_PKCS1);
+$rsa->setPublicKeyFormat(CRYPT_RSA_PUBLIC_FORMAT_PKCS1);
+extract($rsa->createKey(1024)); /// makes $publickey and $privatekey available
 
+/*
+   Change the following variables
+   to match your local/live serv-
+   er, mySQL database, and mySQL
+   table. As well as the proper
+   credentials.
+*/
+$server = "localhost";
+$username = "root";
+$password = "password";
+$db_name = "accounts_for_lab5";
+$db_table = "accounts";
 
-	
-
-
-	$servername = "localhost:8080";
-	$username = "uwamp";
-	$password = "password";
-	// Create connection
-	$conn = new mysqli($servername, $username, $password);
-
-	// Check connection
-	if ($conn->connect_error) 
-	{
-    	die("Connection failed: " . $conn->connect_error);
-	} 
-	echo "Connected successfully";
-
-	$name ="";
-	$password = "";
-	if ($_SERVER["REQUEST_METHOD"] == "POST") 
-	{
-  		$name = $_POST["userName"];
-  		$password = $_POST["password"];
+// Create connection
+$conn = new mysqli($server, $username, $password, $db_name) or die("Cannot connect to server");
 
 
-  		
-  		$sql = "SELECT userName, password FROM Database WHERE userName = $name AND password = $password ";
-		$result = $conn->query($sql);
-
-		if($result->num_rows == 0 )
-		{
-			$sql = "INSERT INTO Database(userName, password, privateKey, publicKey, admin) VALUES ($name, $password, $privatekey, $publickey, False)"; //NOTE: check for valid column names
-			$result = $conn->query($sql);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
-			header("Location: login.html");
-    		exit;
-		}
-		else
-		{
-			echo "Invalid";
-		}
+    $name = $_POST['username'];
+    $password = $_POST['password'];
 
-	}
+    $query = mysqli_query($conn, "SELECT * FROM $db_table WHERE username = '$name'");
 
 
+    if (mysqli_num_rows($query) > 0) {
 
+        $redir = "signUp.php";
+        $message = "This account name already exists!";
+
+    } else {
+
+        $query_insert = "INSERT INTO $db_table (username, password, privatekey, publickey, admin) 
+        VALUES ('$name', '$password', '$privatekey', '$publickey', False)"; //NOTE: check for valid column names
+
+        //Querying the information
+        mysqli_query($conn, $query_insert);
+
+        $redir = "login.php";
+        $message = "Account has been created!";
+
+    }
+
+    //Redirects with success or failure message
+    echo "<script>", "alert('$message');", "window.location.href='$redir';", "</script>";
+
+}
+
+$conn->close();
 ?>
+
+<!--BEGIN HTML-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <form action="signUp.php" method="post">
+        <div class="page-header">
+            <h3>Sign Up</h3>
+        </div>
+        <input placeholder="Enter a Username" type="text" name="username" required>
+        <br><br>
+        <input placeholder="Enter a Password" type="password" name="password" required>
+        <br><br>
+        <input type="submit" class="btn btn-success" id="submit">
+    </form>
+
+    <p id="desc"></p>
+</div>
+</body>
+</html>
