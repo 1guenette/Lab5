@@ -15,12 +15,36 @@
 </head>
 <body>
 
-    <div class="container">
 
+<!--Change the href later, right now they do nothing-->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#top">Posts</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Inbox</a></li>
+            <li><a href="#">Send message</a></li>
+            <li><a href="#">Make post</a></li>
+        </ul>
 
-
-
+        <ul class="nav navbar-nav navbar-right">
+            <form action="index.html"><!--The form is to be changed!-->
+                <li>
+                    <button type="submit" class="btn btn-danger navbar-btn">
+                        <span class="glyphicon glyphicon-log-out"> Logout</span>
+                    </button>
+                </li>
+            </form>
+        </ul>
     </div>
+</nav>
 
+
+<div id="top" class="container text-center">
+    <h1>Posts Page</h1>
+    <hr>
+    <br>
+</div>
 </body>
 </html>

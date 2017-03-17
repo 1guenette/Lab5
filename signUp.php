@@ -37,15 +37,8 @@ extract($rsa->createKey(1024)); /// makes $publickey and $privatekey available
    table. As well as the proper
    credentials.
 */
-$server = "localhost";
-$username = "root";
-$password = "password";
-$db_name = "accounts_for_lab5";
-$db_table = "accounts";
 
-// Create connection
-$conn = new mysqli($server, $username, $password, $db_name) or die("Cannot connect to server");
-
+require_once 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
