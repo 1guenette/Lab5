@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //Querying the information
         mysqli_query($conn, $query_insert);
 
-        $redir = "login.php";
+        $redir = "index.html";
         $message = "Account has been created!";
 
     }

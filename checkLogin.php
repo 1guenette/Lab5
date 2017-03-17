@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     } else {
         $message = "Incorrect username or password!";
-        $redir = "login.html";
+        $redir = "index.html";
     }
 
     echo "<script>", "alert('$message');", "window.location.href='$redir';", "</script>";

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="page-header">
+        <h1>Post Place</h1>
+        <p>a palace for your thoughts</p>
+    </div>
+
+    <!--<a href="login.php"><input type="button" class="btn btn-default" id="login" value="Login"></a>-->
+    <form>
+
+        <h3>Login</h3>
+        <input type="text" placeholder="Username" name="username">
+        <br><br>
+        <input type="password" placeholder="Password" name="password">
+        <br><br>
+        <input type="submit" class="btn btn-success" id="login" onclick="login()">
+    </form>
+    <br>
+    <br>
+    <hr>
+    <h4>If you don't have an account, sign up!</h4>
+    <a href="signUp.php"><input type="button" class="btn btn-default" id="signUp" value="Sign Up"></a>
+
+</div>
+<p id="desc"></p>
+
+
+    <div class="container">
+        <br><br><br>
+        <p>Created by Sam & Sovann</p>
+    </div>
+</body>
+</html>
+
+<!--Below is a palace for scripts...-->
+<script>
+
+    function login() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                this.response;
+            }
+        };
+        xhttp.open("GET", "checkLogin.php?u=" + document.getElementsByName("username")
+            + "&p=" + document.getElementsByName("password"), true);
+        xhttp.send();
+    };
+    <!---->
+</script>
