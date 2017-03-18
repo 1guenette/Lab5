@@ -26,7 +26,9 @@ function updatePosts()
   xhttp.open("POST", "updatePosts.php", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhttp.send("title="+ document.getElementById("title").value+"&description=" + document.getElementById("description").innerHTML);
+  
 }
+
 function viewPost() 
 {
   var xhttp = new XMLHttpRequest();
@@ -46,6 +48,24 @@ function post()
 	updatePosts();
 	viewPosts();
 }
+
+function edit(valTitle, valDesc)
+{
+  var newTitle = prompt("Edit Title", valTitle);
+  var newDesc = prompt("Edit Description", valDesc);
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) 
+    {
+      viewPosts();    
+    }
+  };
+  xhttp.open("POST", "editPosts.php", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("title="+ valTitle +"&description=" + valDesc + "newTitle="+ valTitle +"&newDescription=" + newDesc);
+}
+
+
 </script>
 
 <input amentn="center" type="button" value="logout">
@@ -54,7 +74,7 @@ function post()
  	<ul>
  		<li>Title Goes Here</li>
  		<li>Description Goes Here</li>
- 		<input type="button" id="edit" value="edit" onclick="edit()">
+ 		<input type="button" id="edit" value="edit" onclick="edit('Title Goes Here', 'Description Goes Here')">
  	</ul>
  </div>
 
