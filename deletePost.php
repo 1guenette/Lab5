@@ -19,10 +19,13 @@
 	$description = $_REQUEST["description"];
 	
 	
-	$sql = "UPDATE  FROM postDatabase DELETE description=$newDesc, title=$newTitle WHERE description=$description, title=$title" 
+	$admin = "SELECT admin FROM postDatabase WHERE description=$description, title=$title";
+	$conn->query($admin);
+
+	$sql = "DELETE FROM postDatabase WHERE description=$description, title=$title"; 
 
 
-	if ($_SESSION["name"] == "admin")
+	if ($_SESSION["name"] == "admin" && $admin == 1)
 	{
 		$conn->query($sql);
     	echo "New record created successfully";
