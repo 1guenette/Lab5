@@ -1,0 +1,16 @@
+Work was divided between us.  We would then meet up and code together on issues and bugs in the program that we found 
+and needed help with.
+
+Sovann
+--------
+Messaging
+Post Page
+Messaging Encryption
+Edit & Delete Functionality
+
+Sam
+-----
+Login
+Signup
+Post Page
+Edit & Delete Functionality
