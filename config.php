@@ -17,7 +17,11 @@ $server = "localhost";
 $username = "root";
 $password = "password";
 $db_name = "accounts_for_lab5";
+
 $db_table = "accounts";
+$db_table2 = "posts";
+$db_table3 = "messages";
+
 
 // Create connection
 $conn = new mysqli($server, $username, $password, $db_name) or die("Cannot connect to server");

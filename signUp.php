@@ -1,51 +1,25 @@
 <?php
+
 include_once('phpseclib/Crypt/RSA.php');
 
 //Function for encrypting with RSA
-function rsa_encrypt($string, $public_key)
-{
-    //Create an instance of the RSA cypher and load the key into it
-    $cipher = new Crypt_RSA();
-    $cipher->loadKey($public_key);
-    //Set the encryption mode
-    $cipher->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
-    //Return the encrypted version
-    return $cipher->encrypt($string);
-}
-
-//Function for decrypting with RSA
-function rsa_decrypt($string, $private_key)
-{
-    //Create an instance of the RSA cypher and load the key into it
-    $cipher = new Crypt_RSA();
-    $cipher->loadKey($private_key);
-    //Set the encryption mode
-    $cipher->setEncryptionMode(CRYPT_RSA_ENCRYPTION_PKCS1);
-    //Return the decrypted version
-    return $cipher->decrypt($string);
-}
 
 $rsa = new Crypt_RSA();
 $rsa->setPrivateKeyFormat(CRYPT_RSA_PRIVATE_FORMAT_PKCS1);
 $rsa->setPublicKeyFormat(CRYPT_RSA_PUBLIC_FORMAT_PKCS1);
-extract($rsa->createKey(1024)); /// makes $publickey and $privatekey available
-
-/*
-   Change the following variables
-   to match your local/live serv-
-   er, mySQL database, and mySQL
-   table. As well as the proper
-   credentials.
-*/
+extract($rsa->createKey(1024));
 
 require_once 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
+
     $name = $_POST['username'];
     $password = $_POST['password'];
 
+    $private = base64_encode($privatekey);
+    $public = base64_encode($publickey);
     $query = mysqli_query($conn, "SELECT * FROM $db_table WHERE username = '$name'");
 
 
@@ -56,9 +30,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     } else {
 
-        $query_insert = "INSERT INTO $db_table (username, password, privatekey, publickey, admin) 
-        VALUES ('$name', '$password', '$privatekey', '$publickey', False)"; //NOTE: check for valid column names
 
+        if($name != "admin") {
+            $query_insert = "INSERT INTO $db_table (username, password, privatekey, publickey, admin) 
+        VALUES ('$name', '$password', '$private', '$public', False)"; //NOTE: check for valid column names
+        }
+        else{
+            $query_insert = "INSERT INTO $db_table (username, password, privatekey, publickey, admin) 
+        VALUES ('$name', '$password', '$private', '$public', TRUE)";
+        }
         //Querying the information
         mysqli_query($conn, $query_insert);
 

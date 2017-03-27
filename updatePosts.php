@@ -1,38 +1,29 @@
 <?php
-	$servername = "localhost:8080";
-	$username = "uwamp";
-	$password = "password";
 
-	// Create connection
-	$conn = new mysqli($servername, $username, $password);
-	// Check connection
-	if ($conn->connect_error) 
-	{
-    	die("Connection failed: " . $conn->connect_error);
-	} 
-	echo "Connected successfully";
+session_start();
 
-	
+require_once 'config.php';
 
-	
+$query = mysqli_query($conn, "SELECT * FROM $db_table2");
 
-	$title = $_REQUEST["title"];
-	$description = $_REQUEST["description"];
-	
-	$sql = "INSERT INTO postDatabase(title, description) VALUES($title, $description)";
+$data = array();
+$row = mysqli_fetch_all($query);
 
-	if ($conn->query($sql) === TRUE) 
-	{
-    	echo "New record created successfully";
-	} 
-	else 
-	{
-    	echo "Error: " . $sql . "<br>" . $conn->error;
-	}
 
+foreach($row as $key => $value)
+{
+    $data[$key] = $value;
+}
+
+//Making the first posts appear first
+$j = 0;
+for($i = sizeof($data); $i >= 0; --$i){
+    $dataReversed[$j] = $data[$i];
+    $result = json_encode($dataReversed);
+    $j++;
+}
+
+echo $result;
 $conn->close();
 
-		
-	
 
-?>

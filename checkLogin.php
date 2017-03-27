@@ -1,36 +1,34 @@
 <?php
 
+session_start();
+
 require_once 'config.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    session_start();
-    $name = $_POST["username"];
-    $password = $_POST["password"];
-
-    $sql = "SELECT * FROM $db_table WHERE userName = '$name' AND password = '$password' ";
-    $query = mysqli_query($conn, $sql);
-
-    if (mysqli_num_rows($query) > 0) {
 
 
-//        //Storing JSON data:
-//        $myObj->name = $name;
-//        $myObj->password = $password;
-//        $myObj->admin = $result->admin;
-//        $myObj->publicKey = $result->publicKey;
-//        $myObj->privateKey = $result->privateKey;
-//
-//        $myJSON = json_encode($myObj);
-//        echo $myJSON;
+$name = $_POST["username"];
+$password = $_POST["password"];
 
-        $message = "Success!";
-        $redir = "viewPosts.html";
+$sql = "SELECT * FROM $db_table WHERE userName = '$name' AND password = '$password' ";
+$query = mysqli_query($conn, $sql);
+$row = mysqli_num_rows($query);
+$fet_info = mysqli_fetch_assoc($query);
 
-    } else {
-        $message = "Incorrect username or password!";
-        $redir = "index.html";
-    }
+if ($row == 1) {
 
-    echo "<script>", "alert('$message');", "window.location.href='$redir';", "</script>";
+    $_SESSION["name"] = $fet_info["username"];
+    $_SESSION['admin'] = $fet_info['admin'];
+    $_SESSION['pub'] = $fet_info['publickey'];
+    $_SESSION['pri'] = $fet_info['privatekey'];
+
+
+    $message = "Success!";
+    $redir = "viewPosts.php";
+
+} else {
+
+    $message = "Incorrect username or password!";
+    $redir = "index.html";
 }
+
+echo "<script>", "alert('$message');", "window.location.href='$redir';", "</script>";
