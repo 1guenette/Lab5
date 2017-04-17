@@ -1,4 +1,6 @@
 <?php
-    session_destroy();
+	
+	session_destroy();
+	echo "<script>", "alert('Thank you Come Again');", "window.location.href='index.html';", "</script>";
 
-echo "<script>", "alert('You have logged out');", "window.location.href='index.html';", "</script>";
+?>
